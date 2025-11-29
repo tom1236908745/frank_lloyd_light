@@ -14,7 +14,11 @@ struct ContentView: View {
             Text(String(number))
             Button("Plus"){
                 number = number + 1;
-            }
+            }.frame(width: 100, height: 30)
+                .background(Color.blue)
+                .foregroundColor(.white)
+                .bold()
+                .cornerRadius(30)
         }
         .padding()
     }
