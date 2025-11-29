@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		F2DE0E602ED1CBA2003C71EA /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = F2DE0E5F2ED1CB9A003C71EA /* README.md */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		F2F903FC2ECF49A500E40072 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -24,6 +28,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		F2DE0E5F2ED1CB9A003C71EA /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		F2F903EB2ECF49A200E40072 /* frank_lloyd_light.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = frank_lloyd_light.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F2F903FB2ECF49A500E40072 /* frank_lloyd_lightTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = frank_lloyd_lightTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F2F904052ECF49A500E40072 /* frank_lloyd_lightUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = frank_lloyd_lightUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -75,6 +80,7 @@
 		F2F903E22ECF49A200E40072 = {
 			isa = PBXGroup;
 			children = (
+				F2DE0E5F2ED1CB9A003C71EA /* README.md */,
 				F2F903ED2ECF49A200E40072 /* frank_lloyd_light */,
 				F2F903FE2ECF49A500E40072 /* frank_lloyd_lightTests */,
 				F2F904082ECF49A500E40072 /* frank_lloyd_lightUITests */,
@@ -212,6 +218,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F2DE0E602ED1CBA2003C71EA /* README.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
