@@ -11,14 +11,18 @@ struct ContentView: View {
     @State var number = 0
     var body: some View {
         VStack {
-            Text(String(number))
-            Button("Plus"){
-                number = number + 1;
-            }.frame(width: 100, height: 30)
-                .background(Color.blue)
-                .foregroundColor(.white)
-                .bold()
-                .cornerRadius(30)
+            VStack(alignment: .leading) {
+                Text("Tomoki")
+                    .font(.title)
+                HStack {
+                    Text("App Engineer / Flutter & Swift")
+                        .font(.subheadline)
+                    Spacer()
+                    Text("Japan").font(.subheadline)
+                }
+            }
+            .padding()
+            
         }
         .padding()
     }
