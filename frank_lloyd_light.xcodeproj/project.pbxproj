@@ -12,6 +12,7 @@
 			buildConfigurationList = F252B54A2F3C314D00B53CEE /* Build configuration list for PBXAggregateTarget "Periphery" */;
 			buildPhases = (
 				F252B54F2F3C32F500B53CEE /* ShellScript */,
+				F2029BCF2F3C5230009AD241 /* ShellScript */,
 			);
 			dependencies = (
 			);
@@ -23,6 +24,9 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		F2029BD22F3C52A4009AD241 /* .swiftLint.yml in Resources */ = {isa = PBXBuildFile; fileRef = F2029BD12F3C52A4009AD241 /* .swiftLint.yml */; };
+		F288664E2F3C9BA300DD1F41 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = F288664D2F3C9BA300DD1F41 /* FirebaseAnalytics */; };
+		F28866512F3CA08500DD1F41 /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = F28866502F3CA08500DD1F41 /* FirebaseDatabase */; };
 		F2DE0E602ED1CBA2003C71EA /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = F2DE0E5F2ED1CB9A003C71EA /* README.md */; };
 /* End PBXBuildFile section */
 
@@ -44,6 +48,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		F2029BD12F3C52A4009AD241 /* .swiftLint.yml */ = {isa = PBXFileReference; lastKnownFileType = text; path = .swiftLint.yml; sourceTree = "<group>"; };
 		F2DE0E5F2ED1CB9A003C71EA /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		F2F903EB2ECF49A200E40072 /* frank_lloyd_light.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = frank_lloyd_light.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F2F903FB2ECF49A500E40072 /* frank_lloyd_lightTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = frank_lloyd_lightTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -73,6 +78,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F28866512F3CA08500DD1F41 /* FirebaseDatabase in Frameworks */,
+				F288664E2F3C9BA300DD1F41 /* FirebaseAnalytics in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -93,6 +100,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		F288664F2F3C9FF600DD1F41 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		F2F903E22ECF49A200E40072 = {
 			isa = PBXGroup;
 			children = (
@@ -101,6 +115,8 @@
 				F2F903FE2ECF49A500E40072 /* frank_lloyd_lightTests */,
 				F2F904082ECF49A500E40072 /* frank_lloyd_lightUITests */,
 				F2F903EC2ECF49A200E40072 /* Products */,
+				F2029BD12F3C52A4009AD241 /* .swiftLint.yml */,
+				F288664F2F3C9FF600DD1F41 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -134,6 +150,8 @@
 			);
 			name = frank_lloyd_light;
 			packageProductDependencies = (
+				F288664D2F3C9BA300DD1F41 /* FirebaseAnalytics */,
+				F28866502F3CA08500DD1F41 /* FirebaseDatabase */,
 			);
 			productName = frank_lloyd_light;
 			productReference = F2F903EB2ECF49A200E40072 /* frank_lloyd_light.app */;
@@ -220,6 +238,9 @@
 			);
 			mainGroup = F2F903E22ECF49A200E40072;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				F288664C2F3C9BA300DD1F41 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = F2F903EC2ECF49A200E40072 /* Products */;
 			projectDirPath = "";
@@ -238,6 +259,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F2029BD22F3C52A4009AD241 /* .swiftLint.yml in Resources */,
 				F2DE0E602ED1CBA2003C71EA /* README.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -259,8 +281,27 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		F2029BCF2F3C5230009AD241 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "export PATH=\"$PATH:/opt/homebrew/bin\"\n\ncd /Users/nakayamatomoki/Desktop/IoT/swift/frank_lloyd_light/frank_lloyd_light\n\nif which swiftformat >/dev/null; then\n  swiftformat .\nelse\n  echo \"warning: SwiftFormat not installed, download from https://github.com/nicklockwood/SwiftFormat\"\nfi\n\nif which swiftlint > /dev/null; then\n  swiftlint lint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+		};
 		F252B54F2F3C32F500B53CEE /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);
@@ -475,6 +516,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
+				"OTHER_LDFLAGS[arch=*]" = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.ntomoki.frank-lloyd-light";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -503,6 +545,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
+				"OTHER_LDFLAGS[arch=*]" = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.ntomoki.frank-lloyd-light";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -628,6 +671,30 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		F288664C2F3C9BA300DD1F41 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 12.9.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		F288664D2F3C9BA300DD1F41 /* FirebaseAnalytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F288664C2F3C9BA300DD1F41 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalytics;
+		};
+		F28866502F3CA08500DD1F41 /* FirebaseDatabase */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F288664C2F3C9BA300DD1F41 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseDatabase;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = F2F903E32ECF49A200E40072 /* Project object */;
 }

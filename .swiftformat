@@ -1,0 +1,24 @@
+# インデント
+--indent 4
+--tabwidth 4
+
+# 行長制限なし（SwiftLintでline_length無効）
+--maxwidth none
+
+# selfは必ず明示（SwiftLint explicit_self対策）
+--self insert
+
+# 末尾カンマを付けない（trailing_comma方針）
+--commas never
+
+# 改行
+--linebreaks lf
+
+# import ソート（SwiftLint sorted_imports と一致）
+--importgrouping testable-last
+
+# trailing whitespace削除
+--trim-whitespace always
+
+# ファイル末尾改行
+--insertlines enabled
