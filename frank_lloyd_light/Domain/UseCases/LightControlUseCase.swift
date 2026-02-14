@@ -7,16 +7,16 @@
 
 struct LightControlUseCase {
     private let repository: LightRepository
-    
+
     init(repository: LightRepository) {
         self.repository = repository
     }
-    
+
     func executeFetch() async -> Bool {
-        return await repository.fetchIsTurnOnStatus()
+        await self.repository.fetchIsTurnOnStatus()
     }
-    
+
     func executeUpdate(isTurnOn: Bool) async throws {
-        try await repository.updateIsTurnOnStatus(isTurnOn: isTurnOn)
+        try await self.repository.updateIsTurnOnStatus(isTurnOn: isTurnOn)
     }
 }

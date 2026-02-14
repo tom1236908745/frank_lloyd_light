@@ -7,9 +7,9 @@
 
 struct FirebaseLightRepository: LightRepository {
     func fetchIsTurnOnStatus() async -> Bool {
-        return await FirebaseDatabaseClient.fetchIsTurnOnStatus()
+        await FirebaseDatabaseClient.fetchIsTurnOnStatus()
     }
-    
+
     func updateIsTurnOnStatus(isTurnOn: Bool) async throws {
         try await FirebaseDatabaseClient.updateIsTurnOn(isTurnOn)
     }

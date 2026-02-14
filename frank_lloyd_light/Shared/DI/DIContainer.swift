@@ -12,17 +12,16 @@ class DIContainer {
     static let shared = DIContainer()
     private init() {}
 
-    // --- Repositories ---
-    // 戻り値は protocol型にすることで、実態を隠蔽
+    /// --- Repositories ---
+    /// 戻り値は protocol型にすることで、実態を隠蔽
     private func makeLightRepository() -> LightRepository {
-        return FirebaseLightRepository()
+        FirebaseLightRepository()
     }
-    
-    // --- UseCases ---
-    // Repository を UseCase に注入して作成
+
+    /// --- UseCases ---
+    /// Repository を UseCase に注入して作成
     func makeLightControlUseCase() -> LightControlUseCase {
-        let repository = makeLightRepository()
+        let repository = self.makeLightRepository()
         return LightControlUseCase(repository: repository)
     }
-    
 }
