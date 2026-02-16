@@ -22,12 +22,14 @@ class LightViewModel: ObservableObject {
 
     @MainActor
     func toggle() async {
+        let nextStatus = !self.isTurnOn
         do {
-            let nextStatus = !self.isTurnOn
             try await self.useCase.executeUpdate(isTurnOn: nextStatus)
-            self.isTurnOn = nextStatus
+            // 書き込み成功後、状態をサーバーから再取得
+            self.isTurnOn = await self.useCase.executeFetch()
         } catch {
             print("エラー: \(error)")
+            // 必要に応じてエラーハンドリングを追加
         }
     }
 }

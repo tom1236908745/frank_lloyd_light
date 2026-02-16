@@ -10,13 +10,19 @@ struct LightControlUseCase {
 
     init(repository: LightRepository) {
         self.repository = repository
+        print("[LightControlUseCase] init with repository: \(type(of: repository))")
     }
 
     func executeFetch() async -> Bool {
-        await self.repository.fetchIsTurnOnStatus()
+        print("[LightControlUseCase] executeFetch called")
+        let result = await self.repository.fetchIsTurnOnStatus()
+        print("[LightControlUseCase] executeFetch result: \(result)")
+        return result
     }
 
     func executeUpdate(isTurnOn: Bool) async throws {
+        print("[LightControlUseCase] executeUpdate called with isTurnOn: \(isTurnOn)")
         try await self.repository.updateIsTurnOnStatus(isTurnOn: isTurnOn)
+        print("[LightControlUseCase] executeUpdate completed")
     }
 }
