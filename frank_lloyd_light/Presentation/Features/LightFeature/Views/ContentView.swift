@@ -71,6 +71,14 @@ struct ContentView: View {
             ToggleView(isOn: self.viewModel.isTurnOn, isLoading: self.viewModel.isLoading) {
                 Task {
                     await self.viewModel.toggleUIOnly()
+                    do {
+                        try await self.viewModel.controlColorBulb(
+                            command: self.viewModel.isTurnOn ? "turnOn" : "turnOff",
+                            parameter: "default",
+                        )
+                    } catch {
+                        print("Error:", error)
+                    }
                 }
             }
             .padding(.bottom, 48)
@@ -78,7 +86,7 @@ struct ContentView: View {
         .onAppear {
             Task {
                 await self.viewModel.loadStatus()
-                await self.viewModel.fetchDevices()
+//                await self.viewModel.fetchDeviceStatus()
             }
         }
         .animation(.easeInOut(duration: 0.4), value: self.viewModel.isTurnOn) // 状態変化にアニメーションを付与
