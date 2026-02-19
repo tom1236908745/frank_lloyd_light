@@ -2,6 +2,8 @@ import SwiftUI
 
 struct ContentView: View {
     @StateObject private var viewModel = LightViewModel()
+    @State private var brightnessDebounceTask: Task<Void, Never>? = nil
+    @State private var colorDebounceTask: Task<Void, Never>? = nil
     
     var body: some View {
         ZStack(alignment: .bottom) {
@@ -34,7 +36,25 @@ struct ContentView: View {
                             Slider(value: Binding(
                                 get: { self.viewModel.brightness },
                                 set: { newValue in
+                                    // 即時にUI状態を更新
                                     Task { await self.viewModel.updateBrightness(newValue) }
+                                    // 連続操作時の過剰リクエストを避けるためデバウンス
+                                    brightnessDebounceTask?.cancel()
+                                    brightnessDebounceTask = Task { [newValue] in
+                                        do {
+                                            try await Task.sleep(nanoseconds: 250_000_000) // 250ms
+                                            try Task.checkCancellation()
+                                            let percent = Int(newValue * 100)
+                                            try await self.viewModel.controlColorBulb(
+                                                command: "setBrightness",
+                                                parameter: "\(percent)"
+                                            )
+                                        } catch is CancellationError {
+                                            // キャンセル時は何もしない
+                                        } catch {
+                                            print("Error setBrightness (debounced):", error)
+                                        }
+                                    }
                                 }
                             ), in: 0.0...1.0)
                             Image(systemName: "sun.max.fill")
@@ -53,7 +73,32 @@ struct ContentView: View {
                         ColorGridPicker(
                             selectedColor: Binding(
                                 get: { self.viewModel.color },
-                                set: { newColor in Task { await self.viewModel.updateColor(newColor) } }
+                                set: { newColor in
+                                    // 即時にUI状態を更新
+                                    Task { await self.viewModel.updateColor(newColor) }
+                                    // デバウンスでリクエストを間引く
+                                    colorDebounceTask?.cancel()
+                                    colorDebounceTask = Task { [newColor] in
+                                        do {
+                                            try await Task.sleep(nanoseconds: 250_000_000) // 250ms
+                                            try Task.checkCancellation()
+                                            let ui = UIColor(newColor)
+                                            var r: CGFloat = 0, g: CGFloat = 0, b: CGFloat = 0, a: CGFloat = 0
+                                            ui.getRed(&r, green: &g, blue: &b, alpha: &a)
+                                            let R = Int(round(r * 255))
+                                            let G = Int(round(g * 255))
+                                            let B = Int(round(b * 255))
+                                            try await self.viewModel.controlColorBulb(
+                                                command: "setColor",
+                                                parameter: "\(R):\(G):\(B)"
+                                            )
+                                        } catch is CancellationError {
+                                            // キャンセル時は何もしない
+                                        } catch {
+                                            print("Error setColor (debounced):", error)
+                                        }
+                                    }
+                                }
                             )
                         )
                     }
@@ -326,3 +371,4 @@ struct ToggleView: View {
 #Preview {
     ContentView()
 }
+

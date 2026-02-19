@@ -152,6 +152,8 @@ class LightViewModel: ObservableObject {
             "command": command,
             "parameter": parameter
         ]
+        print("comand", command)
+        print("parameter", parameter)
         let jsonData = try JSONSerialization.data(withJSONObject: body, options: [])
 
         var request = URLRequest(url: url)
