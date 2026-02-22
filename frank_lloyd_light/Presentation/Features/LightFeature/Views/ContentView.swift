@@ -131,7 +131,7 @@ struct ContentView: View {
         .onAppear {
             Task {
                 await self.viewModel.loadStatus()
-//                await self.viewModel.fetchDeviceStatus()
+                await self.viewModel.fetchDeviceStatus()
             }
         }
         .animation(.easeInOut(duration: 0.4), value: self.viewModel.isTurnOn) // 状態変化にアニメーションを付与
@@ -297,16 +297,13 @@ struct ColorGridPicker: View {
             LazyVGrid(columns: columns, spacing: 12) {
                 ForEach(presetHues, id: \.name) { preset in
                     let presetColor = Color(hue: preset.hue, saturation: 1.0, brightness: 1.0)
-                    let isSelected = selectedColor.hsb.hue == preset.hue
+                    let isSelected = abs(selectedColor.hsb.hue - preset.hue) < 0.01
                     Circle()
                         .fill(presetColor)
                         .frame(width: 40, height: 40)
-                        .overlay(
-                            Circle()
-                                .strokeBorder(
-                                    isSelected ? Color.primary : Color.clear,
-                                    lineWidth: 3
-                                )
+                        .padding(isSelected ? 3 : 0)
+                        .background(
+                            Circle().fill(isSelected ? Color.white : Color.clear)
                         )
                         .shadow(color: presetColor.opacity(0.6), radius: isSelected ? 6 : 2)
                         .scaleEffect(isSelected ? 1.15 : 1.0)
@@ -359,7 +356,7 @@ struct ToggleView: View {
             }
             .padding(.vertical, 12)
             .padding(.horizontal, 24)
-            .background(self.isOn ? Color.red.opacity(0.8) : Color.blue.opacity(0.8))
+            .background(self.isOn ? Color.gray.opacity(0.55) : Color(hue: 0.08, saturation: 0.85, brightness: 0.95).opacity(0.9))
             .foregroundColor(.white)
             .cornerRadius(30)
             .shadow(radius: 5)
