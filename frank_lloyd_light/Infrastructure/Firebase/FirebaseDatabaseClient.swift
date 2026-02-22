@@ -8,10 +8,10 @@
 import FirebaseDatabase
 
 enum FirebaseDatabaseClient {
-    /// ルート参照・計算プロパティ
-    static var rootRef: DatabaseReference {
-        Database.database(url: "https://frank-lloyd-light-default-rtdb.asia-southeast1.firebasedatabase.app").reference()
-    }
+    /// ルート参照
+    static let rootRef = Database.database(
+        url: "https://frank-lloyd-light-default-rtdb.asia-southeast1.firebasedatabase.app"
+    ).reference()
 
     /// isTurnOn の状態を参照
     static func fetchIsTurnOnStatus() async -> Bool {
