@@ -8,7 +8,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "BA566F80-D226-4CE9-9DFC-5180C92F470B"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "frank_lloyd_light/Presentation/Features/LightFeature/ViewModels/LightViewModel.swift"
@@ -18,13 +18,43 @@
             endingLineNumber = "150"
             landmarkName = "fetchDeviceStatus()"
             landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "BA566F80-D226-4CE9-9DFC-5180C92F470B - 114dd4e7b38981f1"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "frank_lloyd_light.LightViewModel.fetchDeviceStatus() async throws -&gt; ()"
+                  moduleName = "frank_lloyd_light.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/nakayamatomoki/Desktop/IoT/swift/frank_lloyd_light/frank_lloyd_light/Presentation/Features/LightFeature/ViewModels/LightViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "150"
+                  endingLineNumber = "150">
+               </Location>
+               <Location
+                  uuid = "BA566F80-D226-4CE9-9DFC-5180C92F470B - f43694150811e77"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(1) suspend resume partial function for frank_lloyd_light.LightViewModel.fetchDeviceStatus() async throws -&gt; ()"
+                  moduleName = "frank_lloyd_light.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/nakayamatomoki/Desktop/IoT/swift/frank_lloyd_light/frank_lloyd_light/Presentation/Features/LightFeature/ViewModels/LightViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "150"
+                  endingLineNumber = "150">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "3C87165F-56D6-4175-BF9D-08E2AA8EE24F"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "frank_lloyd_light/Presentation/Features/LightFeature/ViewModels/LightViewModel.swift"
