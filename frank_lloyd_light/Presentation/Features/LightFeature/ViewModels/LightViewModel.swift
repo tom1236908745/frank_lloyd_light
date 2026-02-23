@@ -187,11 +187,7 @@ class LightViewModel: ObservableObject {
     }
     
     func controlColorBulb(command: String, parameter: String = "default") async throws {
-        do {
-            try await self.useCase.executeUpdateDeviceStatus(command: command, parameter: parameter)
-        } catch {
-            self.isLoading = true
-        }
+        try await self.useCase.executeUpdateDeviceStatus(command: command, parameter: parameter)
     }
 }
 
