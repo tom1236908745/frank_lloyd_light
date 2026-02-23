@@ -14,8 +14,8 @@
             filePath = "frank_lloyd_light/Presentation/Features/LightFeature/ViewModels/LightViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "134"
-            endingLineNumber = "134"
+            startingLineNumber = "150"
+            endingLineNumber = "150"
             landmarkName = "fetchDeviceStatus()"
             landmarkType = "7">
          </BreakpointContent>
@@ -30,10 +30,26 @@
             filePath = "frank_lloyd_light/Presentation/Features/LightFeature/ViewModels/LightViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "238"
-            endingLineNumber = "238"
+            startingLineNumber = "190"
+            endingLineNumber = "190"
             landmarkName = "controlColorBulb(command:parameter:)"
             landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "9AD585A8-9FC5-4697-A49C-98EB7142AD3C"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "frank_lloyd_light/Domain/RepositoriesProtocol/LightRepository.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "7"
+            endingLineNumber = "7"
+            landmarkName = "LightRepositoryProtocol"
+            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

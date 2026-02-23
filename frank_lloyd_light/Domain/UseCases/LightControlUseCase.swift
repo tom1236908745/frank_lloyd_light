@@ -5,6 +5,10 @@
 //  Created by 中山智輝 on 2026/02/14.
 //
 
+enum LightControlUsecaseError: Error {
+    case fetchFailed
+}
+
 struct LightControlUseCase {
     private let repository: LightRepository
 
@@ -13,11 +17,16 @@ struct LightControlUseCase {
         print("[LightControlUseCase] init with repository: \(type(of: repository))")
     }
 
-    func executeFetch() async -> Bool {
+    func executeFetch() async throws-> DeviceStatus {
         print("[LightControlUseCase] executeFetch called")
-        let result = await self.repository.fetchIsTurnOnStatus()
-        print("[LightControlUseCase] executeFetch result: \(result)")
-        return result
+        do {
+            let result = try await self.repository.fetchIsTurnOnStatus()
+            print("[LightControlUseCase] executeFetch result: \(result)")
+            return result
+        } catch {
+            print("[LightControlUseCase] executeFetch error")
+            throw LightControlUsecaseError.fetchFailed
+        }
     }
 
     func executeUpdate(isTurnOn: Bool) async throws {

@@ -69,6 +69,10 @@ struct AnyCodable: Codable, Equatable {
     }
 }
 
+enum LightViewModelError: Error {
+    case executeFetchFailed
+}
+
 class LightViewModel: ObservableObject {
     struct DeviceStatus: Codable, Equatable {
         var power: String?
@@ -92,7 +96,12 @@ class LightViewModel: ObservableObject {
 
     @MainActor
     func loadStatus() async {
-        self.isTurnOn = await self.useCase.executeFetch()
+        do {
+            let status = try await self.useCase.executeFetch()
+            self.isTurnOn = status.power == "ON"
+        } catch {
+            self.isLoading = false
+        }
     }
 
     @MainActor
@@ -106,7 +115,14 @@ class LightViewModel: ObservableObject {
         let nextStatus = !self.isTurnOn
         do {
             try await self.useCase.executeUpdate(isTurnOn: nextStatus)
-            self.isTurnOn = await self.useCase.executeFetch()
+            
+            do {
+                let status = try await self.useCase.executeFetch()
+                self.isTurnOn = status.power == "ON"
+            } catch {
+                self.isLoading = false
+            }
+            
             self.isLoading = false
         } catch {
             print("エラー: \(error)")
@@ -131,98 +147,34 @@ class LightViewModel: ObservableObject {
 
     // MARK: - SwitchBot デバイス一覧取得
 
-    func fetchDeviceStatus() async {
+    func fetchDeviceStatus() async throws {
         await MainActor.run { self.isLoading = true }
 
-        let token = Bundle.main.object(forInfoDictionaryKey: "SwitchBotToken") as? String
-        let secret = Bundle.main.object(forInfoDictionaryKey: "SwitchBotSecret") as? String
-        let deviceId = Bundle.main.object(forInfoDictionaryKey: "SwitchBotDeviceId") as? String
-
-        print("[SwitchBot] token present:", token != nil, "secret present:", secret != nil, "DevideId:", deviceId != nil)
-
-        guard let deviceId else {
-            print("deviceId を指定してください")
-            await MainActor.run { self.isLoading = false }
-            return
-        }
-        guard let token, let secret else {
-            print("[SwitchBot] 認証情報が設定されていません（Info.plist の SwitchBotToken / SwitchBotSecret を確認）")
-            await MainActor.run { self.isLoading = false }
-            return
-        }
-
-        let baseUrl = "https://api.switch-bot.com/v1.1/devices/\(deviceId)/status"
-        guard let url = URL(string: baseUrl) else { return }
-
-        let t     = String(Int(Date().timeIntervalSince1970 * 1000))
-        let nonce = UUID().uuidString
-        let stringToSign = token + t + nonce
-        let key   = SymmetricKey(data: Data(secret.utf8))
-        let signature = HMAC<SHA256>.authenticationCode(
-            for: Data(stringToSign.utf8),
-            using: key
-        )
-        let sign = Data(signature).base64EncodedString()
-
-        var request = URLRequest(url: url)
-        request.httpMethod = "GET"
-        request.setValue(token, forHTTPHeaderField: "Authorization")
-        request.setValue(sign,  forHTTPHeaderField: "sign")
-        request.setValue(t,     forHTTPHeaderField: "t")
-        request.setValue(nonce, forHTTPHeaderField: "nonce")
-
-        do {
-            let (data, response) = try await URLSession.shared.data(for: request)
-            if let http = response as? HTTPURLResponse {
-                print("[SwitchBot] HTTP status:", http.statusCode)
-                if http.statusCode == 401 {
-                    print("[SwitchBot][Hint] 401 Unauthorized: トークン/シークレット/署名を再確認してください。")
+        do {let status = try await self.useCase.executeFetch()
+            await MainActor.run {
+                // 初期値として ViewModel の操作状態にも反映
+                if let p = status.power {
+                    self.isTurnOn = (p.lowercased() == "on")
                 }
-            }
-
-            // Try to decode generic SwitchBot status payload
-            struct StatusEnvelope: Decodable {
-                let statusCode: Int
-                let message: String?
-                let body: [String: AnyCodable]?
-            }
-            let decoder = JSONDecoder()
-            if let envelope = try? decoder.decode(StatusEnvelope.self, from: data), let body = envelope.body {
-                let power = (body["power"])?.value as? String
-                let brightness = (body["brightness"])?.value as? Int
-                let color = (body["color"])?.value as? String
-                let status = DeviceStatus(power: power, brightness: brightness, color: color, raw: body)
-                await MainActor.run {
-                    self.deviceStatus = status
-                    // 初期値として ViewModel の操作状態にも反映
-                    if let p = power {
-                        self.isTurnOn = (p.lowercased() == "on")
-                    }
-                    if let b = brightness {
-                        self.brightness = Double(min(max(b, 0), 100)) / 100.0
-                    }
-                    if let c = color {
-                        if let ui = UIColor(hex: c) ?? UIColor(rgbString: c) {
-                            self.color = Color(ui)
-                            // hex が来ないケースもあるため、可能なら hex に正規化
-                            if let hexColor = Self.hexString(from: ui) {
-                                self.colorHex = "#" + hexColor
-                            }
+                if let b = status.brightness {
+                    self.brightness = Double(min(max(b, 0), 100)) / 100.0
+                }
+                if let c = status.color {
+                    if let ui = UIColor(hex: c) ?? UIColor(rgbString: c) {
+                        self.color = Color(ui)
+                        // hex が来ないケースもあるため、可能なら hex に正規化
+                        if let hexColor = Self.hexString(from: ui) {
+                            self.colorHex = "#" + hexColor
                         }
                     }
-                    self.isLoading = false
                 }
-            } else {
-                // Fallback: keep raw string for debugging
-                if let jsonString = String(data: data, encoding: .utf8) {
-                    print("[SwitchBot] response:", jsonString)
-                }
-                await MainActor.run { self.isLoading = false }
+                self.isLoading = false
             }
         } catch {
-            print("[SwitchBot] request error:", error)
-            await MainActor.run { self.isLoading = false }
+            throw LightViewModelError.executeFetchFailed
         }
+    
+           
     }
 
     private static func hexString(from color: UIColor) -> String? {
