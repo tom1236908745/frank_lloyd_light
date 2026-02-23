@@ -5,7 +5,7 @@
 //  Created by 中山智輝 on 2026/02/14.
 //
 
-struct FirebaseLightRepository: LightRepository {
+struct LightRepository: LightRepositoryProtocol {
     func fetchIsTurnOnStatus() async -> Bool {
         await FirebaseDatabaseClient.fetchIsTurnOnStatus()
     }

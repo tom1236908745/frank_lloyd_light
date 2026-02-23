@@ -15,7 +15,7 @@ class DIContainer {
     /// --- Repositories ---
     /// 戻り値は protocol型にすることで、実態を隠蔽
     private func makeLightRepository() -> LightRepository {
-        FirebaseLightRepository()
+        LightRepository()
     }
 
     /// --- UseCases ---
