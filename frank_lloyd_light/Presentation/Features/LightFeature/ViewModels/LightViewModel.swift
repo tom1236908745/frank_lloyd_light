@@ -114,7 +114,7 @@ class LightViewModel: ObservableObject {
         self.isLoading = true
         let nextStatus = !self.isTurnOn
         do {
-            try await self.useCase.executeUpdate(isTurnOn: nextStatus)
+            try await self.useCase.executeUpdateIsTurnOn(isTurnOn: nextStatus)
             
             do {
                 let status = try await self.useCase.executeFetch()
@@ -187,61 +187,11 @@ class LightViewModel: ObservableObject {
     }
     
     func controlColorBulb(command: String, parameter: String = "default") async throws {
-        let token = Bundle.main.object(forInfoDictionaryKey: "SwitchBotToken") as? String
-        let secret = Bundle.main.object(forInfoDictionaryKey: "SwitchBotSecret") as? String
-        let deviceId = Bundle.main.object(forInfoDictionaryKey: "SwitchBotDeviceId") as? String
-        
-        guard let deviceId else {
-            print("deviceId を指定してください")
-            return
+        do {
+            try await self.useCase.executeUpdateDeviceStatus(command: command, parameter: parameter)
+        } catch {
+            self.isLoading = true
         }
-            
-        guard let token, let secret else {
-            print("[SwitchBot] 認証情報が設定されていません（Info.plist の SwitchBotToken / SwitchBotSecret を確認）")
-            return
-        }
-
-        let baseUrl = "https://api.switch-bot.com/v1.1/devices/\(deviceId)/commands"
-        guard let url = URL(string: baseUrl) else { return }
-
-        let t     = String(Int(Date().timeIntervalSince1970 * 1000))
-        let nonce = UUID().uuidString
-        let stringToSign = token + t + nonce
-        let key   = SymmetricKey(data: Data(secret.utf8))
-        let signature = HMAC<SHA256>.authenticationCode(
-            for: Data(stringToSign.utf8),
-            using: key
-        )
-        let sign = Data(signature).base64EncodedString()
-
-        // リクエスト本体
-        let body: [String: Any] = [
-            "commandType": "command",
-            "command": command,
-            "parameter": parameter
-        ]
-        print("comand", command)
-        print("parameter", parameter)
-        let jsonData = try JSONSerialization.data(withJSONObject: body, options: [])
-
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.httpBody = jsonData
-
-        // 必須ヘッダー
-        request.setValue(token, forHTTPHeaderField: "Authorization")
-        request.setValue(sign,  forHTTPHeaderField: "sign")
-        request.setValue(t,     forHTTPHeaderField: "t")
-        request.setValue(nonce, forHTTPHeaderField: "nonce")
-        request.setValue("application/json; charset=utf8", forHTTPHeaderField: "Content-Type")
-
-        let (data, response) = try await URLSession.shared.data(for: request)
-
-        if let httpResp = response as? HTTPURLResponse {
-            print("Status Code:", httpResp.statusCode)
-        }
-        let result = try JSONSerialization.jsonObject(with: data)
-        print("Response:", result)
     }
 }
 

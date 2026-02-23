@@ -7,5 +7,6 @@
 
 protocol LightRepositoryProtocol {
     func fetchIsTurnOnStatus() async throws-> DeviceStatus
+    func updateDeviceStatus(command: String, parameter: String) async throws
     func updateIsTurnOnStatus(isTurnOn: Bool) async throws
 }

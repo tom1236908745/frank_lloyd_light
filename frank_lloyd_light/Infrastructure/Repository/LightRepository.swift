@@ -18,7 +18,8 @@ struct LightRepository: LightRepositoryProtocol {
 //        await FirebaseDatabaseClient.fetchIsTurnOnStatus()
         
         do {
-            let (data, response) = try await URLSession.shared.data(for: SwitchBotClient.fetchDeviceStatus())
+            let request: URLRequest = try await SwitchBotClient.fetchDeviceStatus()
+            let (data, response) = try await URLSession.shared.data(for: request)
             if let http = response as? HTTPURLResponse {
                 print("[SwitchBot] HTTP status:", http.statusCode)
                 if http.statusCode == 401 {
@@ -54,5 +55,16 @@ struct LightRepository: LightRepositoryProtocol {
 
     func updateIsTurnOnStatus(isTurnOn: Bool) async throws {
         try await FirebaseDatabaseClient.updateIsTurnOn(isTurnOn)
+    }
+    
+    func updateDeviceStatus(command: String, parameter: String = "default") async throws {
+        let request: URLRequest = try await SwitchBotClient.updateDeviceStatus(command: command, parameter: parameter)
+        let (data, response) = try await URLSession.shared.data(for: request)
+
+        if let httpResp = response as? HTTPURLResponse {
+            print("Status Code:", httpResp.statusCode)
+        }
+        let result = try JSONSerialization.jsonObject(with: data)
+        print("Response:", result)
     }
 }

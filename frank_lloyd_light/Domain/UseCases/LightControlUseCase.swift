@@ -5,10 +5,6 @@
 //  Created by 中山智輝 on 2026/02/14.
 //
 
-enum LightControlUsecaseError: Error {
-    case fetchFailed
-}
-
 struct LightControlUseCase {
     private let repository: LightRepository
 
@@ -19,19 +15,18 @@ struct LightControlUseCase {
 
     func executeFetch() async throws-> DeviceStatus {
         print("[LightControlUseCase] executeFetch called")
-        do {
-            let result = try await self.repository.fetchIsTurnOnStatus()
-            print("[LightControlUseCase] executeFetch result: \(result)")
-            return result
-        } catch {
-            print("[LightControlUseCase] executeFetch error")
-            throw LightControlUsecaseError.fetchFailed
-        }
+        let result = try await self.repository.fetchIsTurnOnStatus()
+        print("[LightControlUseCase] executeFetch result: \(result)")
+        return result
     }
 
-    func executeUpdate(isTurnOn: Bool) async throws {
-        print("[LightControlUseCase] executeUpdate called with isTurnOn: \(isTurnOn)")
+    func executeUpdateIsTurnOn(isTurnOn: Bool) async throws {
+        print("[LightControlUseCase] executeUpdateIsTurnOn called with isTurnOn: \(isTurnOn)")
         try await self.repository.updateIsTurnOnStatus(isTurnOn: isTurnOn)
-        print("[LightControlUseCase] executeUpdate completed")
+    }
+    
+    func executeUpdateDeviceStatus(command: String, parameter: String = "default") async throws {
+        print("[LightControlUseCase] executeUpdateDeviceStatus called command: \(command), parameter: \(parameter)")
+        try await self.repository.updateDeviceStatus(command: command, parameter: parameter)
     }
 }
