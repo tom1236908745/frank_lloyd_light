@@ -131,7 +131,7 @@ struct ContentView: View {
         .onAppear {
             Task {
                 await self.viewModel.loadStatus()
-                await self.viewModel.fetchDeviceStatus()
+                try await self.viewModel.fetchDeviceStatus()
             }
         }
         .animation(.easeInOut(duration: 0.4), value: self.viewModel.isTurnOn) // 状態変化にアニメーションを付与
