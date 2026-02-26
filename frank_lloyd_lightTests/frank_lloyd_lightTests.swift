@@ -9,7 +9,12 @@ import Testing
 @testable import frank_lloyd_light
 
 struct frank_lloyd_lightTests {
-    @Test func example() {
+    @Test func example() async throws {
         // Write your test here and use APIs like `#expect(...)` to check expected conditions.
+        let array = [1,2,3,4]
+        let num = 4
+        try #require(array.isEmpty == false)
+        #expect(array.contains(num))
     }
 }
+
