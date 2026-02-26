@@ -90,11 +90,6 @@
 			path = frank_lloyd_lightTests;
 			sourceTree = "<group>";
 		};
-		F2F904082ECF49A500E40072 /* frank_lloyd_lightUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = frank_lloyd_lightUITests;
-			sourceTree = "<group>";
-		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -295,7 +290,6 @@
 				F2C1E5A02F4353E4006B6D11 /* Config.xcconfig */,
 				F2DE0E5F2ED1CB9A003C71EA /* README.md */,
 				F2F903FE2ECF49A500E40072 /* frank_lloyd_lightTests */,
-				F2F904082ECF49A500E40072 /* frank_lloyd_lightUITests */,
 				F2F903EC2ECF49A200E40072 /* Products */,
 				F2029BD12F3C52A4009AD241 /* .swiftLint.yml */,
 				F288664F2F3C9FF600DD1F41 /* Frameworks */,
@@ -371,9 +365,6 @@
 			);
 			dependencies = (
 				F2F904072ECF49A500E40072 /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				F2F904082ECF49A500E40072 /* frank_lloyd_lightUITests */,
 			);
 			name = frank_lloyd_lightUITests;
 			packageProductDependencies = (

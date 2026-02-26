@@ -10,18 +10,20 @@ import Foundation
 class DIContainer {
     // どこからでも参照可
     static let shared = DIContainer()
-    private init() {}
-
-    /// --- Repositories ---
-    /// 戻り値は protocol型にすることで、実態を隠蔽
-    private func makeLightRepository() -> LightRepository {
-        LightRepository()
+    
+    var lightRepositoryProvider: () -> LightRepositoryProtocol
+    
+    
+    private init(
+        lightRepositoryProvider: @escaping () -> LightRepositoryProtocol = { LightRepository() }
+    ) {
+        self.lightRepositoryProvider = lightRepositoryProvider
     }
 
     /// --- UseCases ---
     /// Repository を UseCase に注入して作成
     func makeLightControlUseCase() -> LightControlUseCase {
-        let repository = self.makeLightRepository()
+        let repository = lightRepositoryProvider()
         return LightControlUseCase(repository: repository)
     }
 }

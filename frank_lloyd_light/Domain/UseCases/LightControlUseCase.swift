@@ -6,14 +6,14 @@
 //
 
 struct LightControlUseCase {
-    private let repository: LightRepository
+    private let repository: LightRepositoryProtocol
 
-    init(repository: LightRepository) {
+    init(repository: LightRepositoryProtocol) {
         self.repository = repository
         print("[LightControlUseCase] init with repository: \(type(of: repository))")
     }
 
-    func executeFetch() async throws-> DeviceStatus {
+    func executeFetch() async throws -> DeviceStatus {
         print("[LightControlUseCase] executeFetch called")
         let result = try await self.repository.fetchIsTurnOnStatus()
         print("[LightControlUseCase] executeFetch result: \(result)")
