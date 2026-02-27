@@ -11,10 +11,9 @@ class DIContainer {
     // どこからでも参照可
     static let shared = DIContainer()
     
-    var lightRepositoryProvider: () -> LightRepositoryProtocol
+    private let lightRepositoryProvider: () -> LightRepositoryProtocol
     
-    
-    private init(
+    init(
         lightRepositoryProvider: @escaping () -> LightRepositoryProtocol = { LightRepository() }
     ) {
         self.lightRepositoryProvider = lightRepositoryProvider
