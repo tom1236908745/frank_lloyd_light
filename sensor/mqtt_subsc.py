@@ -4,11 +4,15 @@ import requests
 import paho.mqtt.client as mqtt
 
 # ===== SwitchBot設定 =====
-// TODO: SwitchBot設定追加
-TOKEN = ""
-DEVICE_ID = ""
+# TODO: SwitchBot設定追加
+TOKEN = "xxxxx"
 
-url = f"https://api.switch-bot.com/v1.1/devices/{DEVICE_ID}/commands"
+# デバイスリスト
+# TODO: SwitchBot設定追加
+DEVICES = [
+    {"id": "xxxxx", "name": "xxxxx"},
+    {"id": "xxxxx", "name": "xxxxx"},
+]
 
 headers = {
     "Authorization": TOKEN,
@@ -29,18 +33,14 @@ def lux_to_brightness(lux):
     MAX_LUX = 1000
     STEP = 20
 
-    # luxを0〜1に正規化
     normalized = min(lux / MAX_LUX, 1)
-
-    # 20段階
     level = int(normalized * (STEP - 1))
-
-    # brightness 0〜100
     brightness = int(level * (100 / (STEP - 1)))
 
     return brightness
 
-# SwitchBot API送信
+
+# SwitchBot API送信（全デバイスに送る）
 def send_switchbot(brightness):
 
     data = {
@@ -49,8 +49,10 @@ def send_switchbot(brightness):
         "commandType": "command"
     }
 
-    response = requests.post(url, json=data, headers=headers)
-    print("SwitchBot response:", response.text)
+    for device in DEVICES:
+        url = f"https://api.switch-bot.com/v1.1/devices/{device['id']}/commands"
+        response = requests.post(url, json=data, headers=headers)
+        print(f"[{device['name']}] SwitchBot response:", response.text)
 
 
 # MQTT受信
@@ -78,22 +80,17 @@ while True:
 
     current_time = time.time()
 
-    # 1分経過
     if current_time - start_time >= 10:
 
         if len(lux_buffer) > 0:
 
             avg_lux = statistics.mean(lux_buffer)
-
             print("Average lux:", avg_lux)
 
             brightness = lux_to_brightness(avg_lux)
-
             print("Brightness:", brightness)
 
-            send_switchbot(brightness)
+            send_switchbot(brightness)  # 全デバイスに送信
 
         lux_buffer = []
         start_time = time.time()
-
-    time.sleep(1)
