@@ -6,10 +6,10 @@
 
 Adafruit_TSL2561_Unified tsl = Adafruit_TSL2561_Unified(TSL2561_ADDR_FLOAT, 12345);
 // TODO: WiFiの情報を入力
-const char *ssid = "xxx";
-const char *password = "xxx";
+const char *ssid = "xxxxx";
+const char *password = "xxxxx";
 // TODO: Raspberry PiのIPを入力
-const char *mqtt_server = "xxxx"; // Raspberry PiのIP
+const char *mqtt_server = "xxxxx"; // Raspberry PiのIP
 
 WiFiClient espClient;
 PubSubClient client(espClient);
