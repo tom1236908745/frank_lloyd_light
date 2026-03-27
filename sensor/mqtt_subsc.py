@@ -2,6 +2,7 @@ import time
 import statistics
 import requests
 import paho.mqtt.client as mqtt
+from datetime import datetime
 
 # ===== SwitchBot設定 =====
 # TODO: SwitchBot設定追加
@@ -55,10 +56,19 @@ def send_switchbot(brightness):
         print(f"[{device['name']}] SwitchBot response:", response.text)
 
 
+# 稼働時間帯チェック（9:00〜17:00）
+def is_active_hour():
+    hour = datetime.now().hour
+    return 9 <= hour < 17
+
+
 # MQTT受信
 def on_message(client, userdata, msg):
 
     global lux_buffer
+
+    if not is_active_hour():
+        return
 
     lux = float(msg.payload.decode())
     print("lux:", lux)
@@ -80,9 +90,9 @@ while True:
 
     current_time = time.time()
 
-    if current_time - start_time >= 10:
+    if current_time - start_time >= 3600:  # 1時間ごとに処理
 
-        if len(lux_buffer) > 0:
+        if is_active_hour() and len(lux_buffer) > 0:
 
             avg_lux = statistics.mean(lux_buffer)
             print("Average lux:", avg_lux)

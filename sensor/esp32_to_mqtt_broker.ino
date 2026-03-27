@@ -85,5 +85,5 @@ void loop()
         client.publish("sensor/light", msg);
     }
 
-    delay(5000);
+    delay(300000); // 5分ごとに送信
 }
