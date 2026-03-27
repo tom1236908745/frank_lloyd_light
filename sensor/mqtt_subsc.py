@@ -66,6 +66,36 @@ def is_active_hour():
     return 9 <= hour < 17
 
 
+# センサー取得失敗時の太陽光lux推定（時刻テーブル＋線形補間）
+# 各時刻の屋内到達光量の目安値（lux）
+LUX_BY_HOUR = {
+     9: 150,
+    10: 320,
+    11: 530,
+    12: 700,
+    13: 800,
+    14: 730,
+    15: 560,
+    16: 340,
+    17:  80,
+}
+
+def estimate_lux_by_time():
+    now = datetime.now()
+    h = now.hour
+    m = now.minute
+
+    if h not in LUX_BY_HOUR:
+        return 0.0
+
+    lux_now = LUX_BY_HOUR[h]
+    lux_next = LUX_BY_HOUR.get(h + 1, lux_now)
+
+    # 分単位で次の時刻との線形補間
+    estimated = lux_now + (lux_next - lux_now) * (m / 60.0)
+    return round(estimated, 2)
+
+
 # MQTT受信
 def on_message(client, userdata, msg):
 
@@ -100,10 +130,14 @@ while True:
 
     if current_time - start_time >= 3600:  # 1時間ごとに処理
 
-        if is_active_hour() and len(lux_buffer) > 0:
+        if is_active_hour():
 
-            avg_lux = statistics.mean(lux_buffer)
-            print("Average lux:", avg_lux)
+            if len(lux_buffer) > 0:
+                avg_lux = statistics.mean(lux_buffer)
+                print("Average lux:", avg_lux)
+            else:
+                avg_lux = estimate_lux_by_time()
+                print(f"センサーデータなし → 時刻から推定: {avg_lux} lux")
 
             brightness = lux_to_brightness(avg_lux)
             print("Brightness:", brightness)
