@@ -28,12 +28,15 @@ TOPIC = "sensor/light"
 LUX_MIN = 10    # これ未満は真っ暗とみなして除外
 LUX_MAX = 800   # これ以上は明るすぎとみなして除外
 
+# ===== brightness 下限設定 =====
+BRIGHTNESS_MIN = 5  # センサーデータがあるときに送る最低輝度（0送信防止）
+
 lux_buffer = []
 start_time = time.time()
 
 
 # lux → 照明brightness変換
-def lux_to_brightness(lux):
+def lux_to_brightness(lux, apply_min=True):
 
     MAX_LUX = 1000
     STEP = 20
@@ -41,6 +44,9 @@ def lux_to_brightness(lux):
     normalized = min(lux / MAX_LUX, 1)
     level = int(normalized * (STEP - 1))
     brightness = int(level * (100 / (STEP - 1)))
+
+    if apply_min:
+        brightness = max(brightness, BRIGHTNESS_MIN)
 
     return brightness
 
