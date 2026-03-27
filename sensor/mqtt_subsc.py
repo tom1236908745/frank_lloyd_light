@@ -24,6 +24,10 @@ headers = {
 MQTT_BROKER = "localhost"
 TOPIC = "sensor/light"
 
+# ===== lux フィルタ設定 =====
+LUX_MIN = 10    # これ未満は真っ暗とみなして除外
+LUX_MAX = 800   # これ以上は明るすぎとみなして除外
+
 lux_buffer = []
 start_time = time.time()
 
@@ -71,8 +75,12 @@ def on_message(client, userdata, msg):
         return
 
     lux = float(msg.payload.decode())
-    print("lux:", lux)
 
+    if lux < LUX_MIN or lux > LUX_MAX:
+        print(f"lux: {lux} → 範囲外のためスキップ ({LUX_MIN}〜{LUX_MAX})")
+        return
+
+    print("lux:", lux)
     lux_buffer.append(lux)
 
 
