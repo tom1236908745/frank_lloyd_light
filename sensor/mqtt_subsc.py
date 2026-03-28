@@ -53,6 +53,37 @@ def get_location():
     return None
 
 
+# 天候に応じた色温度オフセットを取得（晴れ=補正なし、悪天候=暖色寄り）
+def get_weather_color_temp_offset(lat, lon):
+    try:
+        url = f"https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={OWM_API_KEY}"
+        res = requests.get(url, timeout=5)
+        data = res.json()
+
+        main = data["weather"][0]["main"]
+        clouds = data["clouds"]["all"]  # 雲量 0〜100%
+
+        if main == "Thunderstorm":
+            return -1500  # 非常に暗い → 大きく暖色寄り
+        elif main in ("Rain", "Drizzle"):
+            return -1200  # 雨 → 暖色寄り
+        elif main == "Clouds":
+            if clouds <= 30:
+                return -200   # 薄曇り
+            elif clouds <= 60:
+                return -500   # 曇り
+            elif clouds <= 90:
+                return -800   # 厚曇り
+            else:
+                return -1000  # ほぼ完全曇天
+        else:  # Clear
+            return 0
+
+    except Exception as e:
+        print(f"天候取得失敗（色温度）: {e}")
+        return 0  # 取得失敗時は補正なし
+
+
 # 天候に応じたlux補正倍率を取得
 def get_weather_multiplier(lat, lon):
     try:
@@ -242,7 +273,12 @@ while True:
 
             brightness = lux_to_brightness(avg_lux)
             color_temp = get_color_temp_by_time()
-            print(f"Brightness: {brightness}%, ColorTemp: {color_temp}K")
+            if location:
+                offset = get_weather_color_temp_offset(*location)
+                color_temp = max(2700, min(6500, color_temp + offset))
+                print(f"Brightness: {brightness}%, ColorTemp: {color_temp}K (天候オフセット: {offset:+d}K)")
+            else:
+                print(f"Brightness: {brightness}%, ColorTemp: {color_temp}K")
 
             send_switchbot(brightness, color_temp)  # 全デバイスに送信
 
