@@ -35,7 +35,6 @@ Domain
 Infrastructure
   └── LightRepository      # リポジトリ実装
   └── SwitchBotClient      # SwitchBot API クライアント
-  └── FirebaseDatabaseClient  # Firebase Realtime Database クライアント
 
 Shared
   └── DIContainer          # 依存性注入
@@ -51,7 +50,6 @@ Shared
 | 状態管理 | ObservableObject / @Published |
 | 照明制御 | SwitchBot API v1.1 |
 | 認証 | HMAC-SHA256署名（CryptoKit） |
-| DB | Firebase Realtime Database |
 
 ---
 

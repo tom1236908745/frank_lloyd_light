@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import CryptoKit
 
 enum SwitchBotAPIError: Error {
     case invalidResponse
@@ -54,7 +53,8 @@ struct LightRepository: LightRepositoryProtocol {
     }
 
     func updateIsTurnOnStatus(isTurnOn: Bool) async throws {
-        try await FirebaseDatabaseClient.updateIsTurnOn(isTurnOn)
+        let command = isTurnOn ? "turnOn" : "turnOff"
+        try await updateDeviceStatus(command: command, parameter: "default")
     }
     
     func updateDeviceStatus(command: String, parameter: String = "default") async throws {
