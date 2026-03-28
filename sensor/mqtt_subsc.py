@@ -1,8 +1,37 @@
 import time
+import logging
 import statistics
 import requests
 import paho.mqtt.client as mqtt
 from datetime import datetime
+from pathlib import Path
+
+# ===== ログ設定 =====
+LOG_FORMAT = "%(asctime)s [%(levelname)s] %(message)s"
+LOG_DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
+
+def get_log_path():
+    now = datetime.now()
+    return Path("logs") / now.strftime("%Y-%m") / f"{now.strftime('%d')}.log"
+
+def setup_logger():
+    log_path = get_log_path()
+    log_path.parent.mkdir(parents=True, exist_ok=True)
+
+    logger = logging.getLogger("sensor")
+    logger.setLevel(logging.INFO)
+    logger.handlers.clear()
+
+    logger.addHandler(logging.FileHandler(log_path, encoding="utf-8"))
+    logger.addHandler(logging.StreamHandler())
+
+    for handler in logger.handlers:
+        handler.setFormatter(logging.Formatter(LOG_FORMAT, datefmt=LOG_DATE_FORMAT))
+
+    return logger
+
+logger = setup_logger()
+current_log_date = datetime.now().date()
 
 # ===== SwitchBot設定 =====
 # TODO: SwitchBot設定追加
@@ -46,10 +75,10 @@ def get_location():
         res = requests.get("http://ip-api.com/json/", timeout=5)
         data = res.json()
         if data.get("status") == "success":
-            print(f"現在地取得: {data['city']} ({data['lat']}, {data['lon']})")
+            logger.info(f"現在地取得: {data['city']} ({data['lat']}, {data['lon']})")
             return data["lat"], data["lon"]
     except Exception as e:
-        print(f"現在地取得失敗: {e}")
+        logger.warning(f"現在地取得失敗: {e}")
     return None
 
 
@@ -62,26 +91,27 @@ def get_weather_color_temp_offset(lat, lon):
 
         main = data["weather"][0]["main"]
         clouds = data["clouds"]["all"]  # 雲量 0〜100%
+        logger.info(f"天候（色温度用）: {main}, 雲量: {clouds}%")
 
         if main == "Thunderstorm":
-            return -1500  # 非常に暗い → 大きく暖色寄り
+            return -1500
         elif main in ("Rain", "Drizzle"):
-            return -1200  # 雨 → 暖色寄り
+            return -1200
         elif main == "Clouds":
             if clouds <= 30:
-                return -200   # 薄曇り
+                return -200
             elif clouds <= 60:
-                return -500   # 曇り
+                return -500
             elif clouds <= 90:
-                return -800   # 厚曇り
+                return -800
             else:
-                return -1000  # ほぼ完全曇天
+                return -1000
         else:  # Clear
             return 0
 
     except Exception as e:
-        print(f"天候取得失敗（色温度）: {e}")
-        return 0  # 取得失敗時は補正なし
+        logger.warning(f"天候取得失敗（色温度）: {e}")
+        return 0
 
 
 # 天候に応じたlux補正倍率を取得
@@ -93,7 +123,7 @@ def get_weather_multiplier(lat, lon):
 
         main = data["weather"][0]["main"]
         clouds = data["clouds"]["all"]  # 雲量 0〜100%
-        print(f"天候: {main}, 雲量: {clouds}%")
+        logger.info(f"天候（lux補正用）: {main}, 雲量: {clouds}%")
 
         if main == "Thunderstorm":
             return 0.1
@@ -101,19 +131,19 @@ def get_weather_multiplier(lat, lon):
             return 0.2
         elif main == "Clouds":
             if clouds <= 30:
-                return 0.85   # 薄曇り
+                return 0.85
             elif clouds <= 60:
-                return 0.6    # 曇り
+                return 0.6
             elif clouds <= 90:
-                return 0.4    # 厚曇り
+                return 0.4
             else:
-                return 0.25   # ほぼ完全曇天
+                return 0.25
         else:  # Clear など
             return 1.0
 
     except Exception as e:
-        print(f"天候取得失敗: {e}")
-        return 1.0  # 取得失敗時は補正なし
+        logger.warning(f"天候取得失敗（lux補正）: {e}")
+        return 1.0
 
 
 # lux → 照明brightness変換
@@ -182,7 +212,7 @@ def send_switchbot(brightness, color_temp):
             "commandType": "command"
         }, headers=headers)
 
-        print(f"[{device['name']}] brightness={brightness}%, color_temp={color_temp}K → {response.text}")
+        logger.info(f"    [{device['name']}] 送信完了 → response: {response.text}")
 
 
 # 稼働時間帯チェック（9:00〜17:00）
@@ -232,10 +262,10 @@ def on_message(client, userdata, msg):
     lux = float(msg.payload.decode())
 
     if lux < LUX_MIN or lux > LUX_MAX:
-        print(f"lux: {lux} → 範囲外のためスキップ ({LUX_MIN}〜{LUX_MAX})")
+        logger.warning(f"lux: {lux} → 範囲外のためスキップ ({LUX_MIN}〜{LUX_MAX})")
         return
 
-    print("lux:", lux)
+    logger.info(f"lux受信: {lux} (バッファ件数: {len(lux_buffer) + 1})")
     lux_buffer.append(lux)
 
 
@@ -249,38 +279,68 @@ client.subscribe(TOPIC)
 
 client.loop_start()
 
-print("MQTT subscriber started")
+logger.info("MQTT subscriber started")
 
 while True:
+
+    # 日付が変わったらloggerを切り替え
+    today = datetime.now().date()
+    if today != current_log_date:
+        logger = setup_logger()
+        current_log_date = today
+        logger.info(f"日付変更 → 新しいログファイルに切り替え: {get_log_path()}")
 
     current_time = time.time()
 
     if current_time - start_time >= 3600:  # 1時間ごとに処理
 
+        now_str = datetime.now().strftime("%H:%M")
+        logger.info(f"{'='*50}")
+        logger.info(f"  処理開始 [{now_str}]")
+        logger.info(f"{'='*50}")
+
         if is_active_hour():
 
+            # --- センサーデータ ---
+            logger.info(f"  [センサー]")
             if len(lux_buffer) > 0:
                 avg_lux = statistics.mean(lux_buffer)
-                print("Average lux:", avg_lux)
+                lux_min = min(lux_buffer)
+                lux_max = max(lux_buffer)
+                logger.info(f"    取得方法 : 実測値")
+                logger.info(f"    サンプル数: {len(lux_buffer)} 件")
+                logger.info(f"    lux      : 平均={avg_lux:.1f}  最小={lux_min:.1f}  最大={lux_max:.1f}")
             else:
                 avg_lux = estimate_lux_by_time()
                 if location:
                     multiplier = get_weather_multiplier(*location)
                     avg_lux = round(avg_lux * multiplier, 2)
-                    print(f"センサーデータなし → 時刻推定 + 天候補正: {avg_lux} lux")
+                    logger.warning(f"    取得方法 : フォールバック（時刻推定 + 天候補正）")
+                    logger.warning(f"    lux      : {avg_lux}  (補正倍率: {multiplier})")
                 else:
-                    print(f"センサーデータなし → 時刻から推定: {avg_lux} lux")
+                    logger.warning(f"    取得方法 : フォールバック（時刻推定のみ）")
+                    logger.warning(f"    lux      : {avg_lux}")
 
+            # --- 照明制御値 ---
             brightness = lux_to_brightness(avg_lux)
             color_temp = get_color_temp_by_time()
+            logger.info(f"  [照明制御]")
             if location:
                 offset = get_weather_color_temp_offset(*location)
                 color_temp = max(2700, min(6500, color_temp + offset))
-                print(f"Brightness: {brightness}%, ColorTemp: {color_temp}K (天候オフセット: {offset:+d}K)")
+                logger.info(f"    brightness : {brightness}%")
+                logger.info(f"    color_temp : {color_temp}K  (天候オフセット: {offset:+d}K)")
             else:
-                print(f"Brightness: {brightness}%, ColorTemp: {color_temp}K")
+                logger.info(f"    brightness : {brightness}%")
+                logger.info(f"    color_temp : {color_temp}K")
 
-            send_switchbot(brightness, color_temp)  # 全デバイスに送信
+            # --- API送信 ---
+            logger.info(f"  [SwitchBot API]")
+            send_switchbot(brightness, color_temp)
 
+        else:
+            logger.info(f"  稼働時間外のためスキップ")
+
+        logger.info(f"{'='*50}\n")
         lux_buffer = []
         start_time = time.time()
