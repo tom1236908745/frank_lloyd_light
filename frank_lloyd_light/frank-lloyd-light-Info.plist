@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>SWITCHBOT_TOKEN</key>
+	<string>$(SWITCHBOT_TOKEN)</string>
+	<key>SWITCHBOT_SECRET</key>
+	<string>$(SWITCHBOT_SECRET)</string>
+	<key>SWITCHBOT_DEVICE_ID</key>
+	<string>$(SWITCHBOT_DEVICE_ID)</string>
+</dict>
+</plist>
