@@ -101,19 +101,57 @@ def lux_to_brightness(lux, apply_min=True):
     return brightness
 
 
-# SwitchBot API送信（全デバイスに送る）
-def send_switchbot(brightness):
+# 時刻に応じた色温度テーブル（Kelvin）
+# 朝・夕方は暖色（2700K）、昼は昼白色（6500K）
+COLOR_TEMP_BY_HOUR = {
+     9: 2700,
+    10: 3500,
+    11: 4500,
+    12: 5500,
+    13: 6500,
+    14: 6000,
+    15: 5000,
+    16: 3800,
+    17: 2700,
+}
 
-    data = {
-        "command": "setBrightness",
-        "parameter": str(brightness),
-        "commandType": "command"
-    }
+def get_color_temp_by_time():
+    now = datetime.now()
+    h = now.hour
+    m = now.minute
+
+    if h not in COLOR_TEMP_BY_HOUR:
+        return 4000  # デフォルト値
+
+    temp_now = COLOR_TEMP_BY_HOUR[h]
+    temp_next = COLOR_TEMP_BY_HOUR.get(h + 1, temp_now)
+
+    # 分単位で線形補間
+    color_temp = int(temp_now + (temp_next - temp_now) * (m / 60.0))
+    return color_temp
+
+
+# SwitchBot API送信（全デバイスに送る）
+def send_switchbot(brightness, color_temp):
 
     for device in DEVICES:
         url = f"https://api.switch-bot.com/v1.1/devices/{device['id']}/commands"
-        response = requests.post(url, json=data, headers=headers)
-        print(f"[{device['name']}] SwitchBot response:", response.text)
+
+        # 明るさ送信
+        requests.post(url, json={
+            "command": "setBrightness",
+            "parameter": str(brightness),
+            "commandType": "command"
+        }, headers=headers)
+
+        # 色温度送信
+        response = requests.post(url, json={
+            "command": "setColorTemperature",
+            "parameter": str(color_temp),
+            "commandType": "command"
+        }, headers=headers)
+
+        print(f"[{device['name']}] brightness={brightness}%, color_temp={color_temp}K → {response.text}")
 
 
 # 稼働時間帯チェック（9:00〜17:00）
@@ -203,9 +241,10 @@ while True:
                     print(f"センサーデータなし → 時刻から推定: {avg_lux} lux")
 
             brightness = lux_to_brightness(avg_lux)
-            print("Brightness:", brightness)
+            color_temp = get_color_temp_by_time()
+            print(f"Brightness: {brightness}%, ColorTemp: {color_temp}K")
 
-            send_switchbot(brightness)  # 全デバイスに送信
+            send_switchbot(brightness, color_temp)  # 全デバイスに送信
 
         lux_buffer = []
         start_time = time.time()
