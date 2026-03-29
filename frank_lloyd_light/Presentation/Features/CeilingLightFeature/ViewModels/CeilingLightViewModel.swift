@@ -36,6 +36,7 @@ class CeilingLightViewModel: ObservableObject {
 
     @MainActor
     func loadStatus() async {
+        isLoading = true
         do {
             let status = try await useCase.executeFetch()
             isTurnOn = status.power?.lowercased() == "on"
@@ -49,6 +50,7 @@ class CeilingLightViewModel: ObservableObject {
         } catch {
             print("[CeilingLightViewModel] loadStatus error:", error)
         }
+        isLoading = false
     }
 
     @MainActor

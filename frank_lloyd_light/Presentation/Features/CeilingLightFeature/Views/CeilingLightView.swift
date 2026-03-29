@@ -163,6 +163,16 @@ struct CeilingLightView: View {
             Task { await viewModel.loadStatus() }
         }
         .animation(.easeInOut(duration: 0.4), value: viewModel.isTurnOn)
+        .overlay {
+            if viewModel.isLoading {
+                ZStack {
+                    Color.black.opacity(0.08).ignoresSafeArea()
+                    ProgressView()
+                        .progressViewStyle(.circular)
+                        .scaleEffect(1.5)
+                }
+            }
+        }
     }
 }
 

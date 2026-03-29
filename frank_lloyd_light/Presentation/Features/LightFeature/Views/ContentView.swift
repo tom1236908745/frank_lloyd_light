@@ -364,7 +364,7 @@ struct ToggleView: View {
             }
             .padding(.vertical, 12)
             .padding(.horizontal, 24)
-            .background(self.isOn ? Color.gray.opacity(0.55) : Color(hue: 0.08, saturation: 0.85, brightness: 0.95).opacity(0.9))
+            .background(self.isLoading ? Color.gray.opacity(0.3) : (self.isOn ? Color.gray.opacity(0.55) : Color(hue: 0.08, saturation: 0.85, brightness: 0.95).opacity(0.9)))
             .foregroundColor(.white)
             .cornerRadius(30)
             .shadow(radius: 5)
