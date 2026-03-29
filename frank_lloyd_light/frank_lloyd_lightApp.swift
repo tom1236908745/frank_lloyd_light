@@ -31,7 +31,7 @@ struct FrankLloydLightApp: App {
     var body: some Scene {
         WindowGroup {
             NavigationView {
-                ContentView()
+                DeviceListView()
             }
         }
     }

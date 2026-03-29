@@ -11,18 +11,18 @@ class DIContainer {
     // どこからでも参照可
     static let shared = DIContainer()
     
-    private let lightRepositoryProvider: () -> LightRepositoryProtocol
+    private let lightRepositoryProvider: (String) -> LightRepositoryProtocol
     
     init(
-        lightRepositoryProvider: @escaping () -> LightRepositoryProtocol = { LightRepository() }
+        lightRepositoryProvider: @escaping (String) -> LightRepositoryProtocol = { deviceId in LightRepository(deviceId: deviceId) }
     ) {
         self.lightRepositoryProvider = lightRepositoryProvider
     }
 
     /// --- UseCases ---
     /// Repository を UseCase に注入して作成
-    func makeLightControlUseCase() -> LightControlUseCase {
-        let repository = lightRepositoryProvider()
+    func makeLightControlUseCase(deviceId: String) -> LightControlUseCase {
+        let repository = lightRepositoryProvider(deviceId)
         return LightControlUseCase(repository: repository)
     }
 }

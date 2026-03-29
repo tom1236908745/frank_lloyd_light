@@ -1,9 +1,15 @@
 import SwiftUI
 
-struct ContentView: View {
-    @StateObject private var viewModel = LightViewModel()
+struct LightControlView: View {
+    let device: Device
+    @StateObject private var viewModel: LightViewModel
     @State private var brightnessDebounceTask: Task<Void, Never>? = nil
     @State private var colorDebounceTask: Task<Void, Never>? = nil
+    
+    init(device: Device) {
+        self.device = device
+        self._viewModel = StateObject(wrappedValue: LightViewModel(deviceId: device.id))
+    }
     
     var body: some View {
         ZStack(alignment: .bottom) {
@@ -128,6 +134,8 @@ struct ContentView: View {
             }
             .padding(.bottom, 48)
         }
+        .navigationTitle(device.name)
+        .navigationBarTitleDisplayMode(.inline)
         .onAppear {
             Task {
                 await self.viewModel.loadStatus()
@@ -366,6 +374,8 @@ struct ToggleView: View {
 }
 
 #Preview {
-    ContentView()
+    NavigationView {
+        LightControlView(device: Device(id: "94A99077E00A", name: "リビングの照明", type: .colorBulb))
+    }
 }
 

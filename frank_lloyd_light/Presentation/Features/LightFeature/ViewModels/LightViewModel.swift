@@ -89,9 +89,11 @@ class LightViewModel: ObservableObject {
     @Published var deviceStatus: DeviceStatus? = nil
 
     private let useCase: LightControlUseCase
+    private let deviceId: String
 
-    init(useCase: LightControlUseCase = DIContainer.shared.makeLightControlUseCase()) {
-        self.useCase = useCase
+    init(deviceId: String, useCase: LightControlUseCase? = nil) {
+        self.deviceId = deviceId
+        self.useCase = useCase ?? DIContainer.shared.makeLightControlUseCase(deviceId: deviceId)
     }
 
     @MainActor

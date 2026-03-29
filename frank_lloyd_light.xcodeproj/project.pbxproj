@@ -39,6 +39,10 @@
 		F256F85B2F4C2B2A0006F018 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F256F84C2F4C2B2A0006F018 /* GoogleService-Info.plist */; };
 		F288664E2F3C9BA300DD1F41 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = F288664D2F3C9BA300DD1F41 /* FirebaseAnalytics */; };
 		F28866512F3CA08500DD1F41 /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = F28866502F3CA08500DD1F41 /* FirebaseDatabase */; };
+		F2C1F6792F7934FF0078D380 /* Device.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2C1F6782F7934FF0078D380 /* Device.swift */; };
+		F2C1F67B2F7935040078D380 /* DeviceListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2C1F67A2F7935040078D380 /* DeviceListViewModel.swift */; };
+		F2C1F67D2F7935140078D380 /* DeviceListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2C1F67C2F7935140078D380 /* DeviceListView.swift */; };
+		F2C1F67F2F79359D0078D380 /* LightControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2C1F67E2F79359D0078D380 /* LightControlView.swift */; };
 		F2DE0E602ED1CBA2003C71EA /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = F2DE0E5F2ED1CB9A003C71EA /* README.md */; };
 /* End PBXBuildFile section */
 
@@ -74,6 +78,10 @@
 		F256F84A2F4C2B2A0006F018 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F256F84B2F4C2B2A0006F018 /* frank_lloyd_lightApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = frank_lloyd_lightApp.swift; sourceTree = "<group>"; };
 		F256F84C2F4C2B2A0006F018 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		F2C1F6782F7934FF0078D380 /* Device.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Device.swift; sourceTree = "<group>"; };
+		F2C1F67A2F7935040078D380 /* DeviceListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceListViewModel.swift; sourceTree = "<group>"; };
+		F2C1F67C2F7935140078D380 /* DeviceListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceListView.swift; sourceTree = "<group>"; };
+		F2C1F67E2F79359D0078D380 /* LightControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightControlView.swift; sourceTree = "<group>"; };
 		F2DE0E5F2ED1CB9A003C71EA /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		F2F903EB2ECF49A200E40072 /* frank_lloyd_light.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = frank_lloyd_light.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F2F903FB2ECF49A500E40072 /* frank_lloyd_lightTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = frank_lloyd_lightTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -287,6 +295,10 @@
 				F2F903EC2ECF49A200E40072 /* Products */,
 				F2029BD12F3C52A4009AD241 /* .swiftLint.yml */,
 				F288664F2F3C9FF600DD1F41 /* Frameworks */,
+				F2C1F6782F7934FF0078D380 /* Device.swift */,
+				F2C1F67A2F7935040078D380 /* DeviceListViewModel.swift */,
+				F2C1F67C2F7935140078D380 /* DeviceListView.swift */,
+				F2C1F67E2F79359D0078D380 /* LightControlView.swift */,
 			);
 			sourceTree = "<group>";
 		};
@@ -496,10 +508,14 @@
 				F256F8512F4C2B2A0006F018 /* LightControlUseCase.swift in Sources */,
 				F237804B2F792E4D00C7E339 /* SwitchBotClient.swift in Sources */,
 				F256F8542F4C2B2A0006F018 /* LightRepository.swift in Sources */,
+				F2C1F67F2F79359D0078D380 /* LightControlView.swift in Sources */,
 				F256F8552F4C2B2A0006F018 /* LightViewModel.swift in Sources */,
+				F2C1F67D2F7935140078D380 /* DeviceListView.swift in Sources */,
 				F256F8562F4C2B2A0006F018 /* ContentView.swift in Sources */,
 				F256F8572F4C2B2A0006F018 /* DIContainer.swift in Sources */,
 				F256F8582F4C2B2A0006F018 /* frank_lloyd_lightApp.swift in Sources */,
+				F2C1F67B2F7935040078D380 /* DeviceListViewModel.swift in Sources */,
+				F2C1F6792F7934FF0078D380 /* Device.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

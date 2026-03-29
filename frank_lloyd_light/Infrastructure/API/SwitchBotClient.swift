@@ -8,11 +8,10 @@ enum SwitchBotClient {
         case missingCredentials
     }
     
-    private static func getCredentials() throws -> (token: String, secret: String, deviceId: String) {
+    private static func getCredentials() throws -> (token: String, secret: String) {
         guard
             let tokenRaw = Bundle.main.object(forInfoDictionaryKey: "SWITCHBOT_TOKEN") as? String,
-            let secretRaw = Bundle.main.object(forInfoDictionaryKey: "SWITCHBOT_SECRET") as? String,
-            let deviceIdRaw = Bundle.main.object(forInfoDictionaryKey: "SWITCHBOT_DEVICE_ID") as? String
+            let secretRaw = Bundle.main.object(forInfoDictionaryKey: "SWITCHBOT_SECRET") as? String
         else {
             throw SwitchBotClientError.missingCredentials
         }
@@ -20,9 +19,8 @@ enum SwitchBotClient {
         // Remove surrounding quotes if present
         let token = tokenRaw.trimmingCharacters(in: CharacterSet(charactersIn: "\""))
         let secret = secretRaw.trimmingCharacters(in: CharacterSet(charactersIn: "\""))
-        let deviceId = deviceIdRaw.trimmingCharacters(in: CharacterSet(charactersIn: "\""))
         
-        return (token, secret, deviceId)
+        return (token, secret)
     }
     
     private static func applyAuthHeaders(_ request: inout URLRequest, token: String, secret: String) {
@@ -48,11 +46,11 @@ enum SwitchBotClient {
         request.setValue("1", forHTTPHeaderField: "signVersion")
     }
     
-    static func fetchDeviceStatus() async throws -> URLRequest {
+    static func fetchDeviceStatus(deviceId: String) async throws -> URLRequest {
         let credentials = try getCredentials()
         let url = baseURL
             .appendingPathComponent("devices")
-            .appendingPathComponent(credentials.deviceId)
+            .appendingPathComponent(deviceId)
             .appendingPathComponent("status")
         
         var request = URLRequest(url: url)
@@ -65,11 +63,11 @@ enum SwitchBotClient {
         return request
     }
     
-    static func updateDeviceStatus(command: String, parameter: String) async throws -> URLRequest {
+    static func updateDeviceStatus(deviceId: String, command: String, parameter: String) async throws -> URLRequest {
         let credentials = try getCredentials()
         let url = baseURL
             .appendingPathComponent("devices")
-            .appendingPathComponent(credentials.deviceId)
+            .appendingPathComponent(deviceId)
             .appendingPathComponent("commands")
         
         var request = URLRequest(url: url)

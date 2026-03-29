@@ -13,11 +13,17 @@ enum SwitchBotAPIError: Error {
 }
 
 struct LightRepository: LightRepositoryProtocol {
+    let deviceId: String
+    
+    init(deviceId: String) {
+        self.deviceId = deviceId
+    }
+    
     func fetchIsTurnOnStatus() async throws -> DeviceStatus {
 //        await FirebaseDatabaseClient.fetchIsTurnOnStatus()
         
         do {
-            let request: URLRequest = try await SwitchBotClient.fetchDeviceStatus()
+            let request: URLRequest = try await SwitchBotClient.fetchDeviceStatus(deviceId: deviceId)
             let (data, response) = try await URLSession.shared.data(for: request)
             if let http = response as? HTTPURLResponse {
                 print("[SwitchBot] HTTP status:", http.statusCode)
@@ -58,7 +64,7 @@ struct LightRepository: LightRepositoryProtocol {
     }
     
     func updateDeviceStatus(command: String, parameter: String = "default") async throws {
-        let request: URLRequest = try await SwitchBotClient.updateDeviceStatus(command: command, parameter: parameter)
+        let request: URLRequest = try await SwitchBotClient.updateDeviceStatus(deviceId: deviceId, command: command, parameter: parameter)
         let (data, response) = try await URLSession.shared.data(for: request)
 
         if let httpResp = response as? HTTPURLResponse {
