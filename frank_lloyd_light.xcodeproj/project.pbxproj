@@ -43,6 +43,7 @@
 		F2C1F67B2F7935040078D380 /* DeviceListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2C1F67A2F7935040078D380 /* DeviceListViewModel.swift */; };
 		F2C1F67D2F7935140078D380 /* DeviceListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2C1F67C2F7935140078D380 /* DeviceListView.swift */; };
 		F2C1F6862F79BBBB0078D380 /* CeilingLightView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2C1F6872F79BBBB0078D380 /* CeilingLightView.swift */; };
+		F2C1F68A2F79CCCC0078D380 /* CeilingLightViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2C1F68B2F79CCCC0078D380 /* CeilingLightViewModel.swift */; };
 		F2DE0E602ED1CBA2003C71EA /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = F2DE0E5F2ED1CB9A003C71EA /* README.md */; };
 /* End PBXBuildFile section */
 
@@ -82,6 +83,7 @@
 		F2C1F67A2F7935040078D380 /* DeviceListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceListViewModel.swift; sourceTree = "<group>"; };
 		F2C1F67C2F7935140078D380 /* DeviceListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceListView.swift; sourceTree = "<group>"; };
 		F2C1F6872F79BBBB0078D380 /* CeilingLightView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CeilingLightView.swift; sourceTree = "<group>"; };
+		F2C1F68B2F79CCCC0078D380 /* CeilingLightViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CeilingLightViewModel.swift; sourceTree = "<group>"; };
 		F2DE0E5F2ED1CB9A003C71EA /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		F2F903EB2ECF49A200E40072 /* frank_lloyd_light.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = frank_lloyd_light.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F2F903FB2ECF49A500E40072 /* frank_lloyd_lightTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = frank_lloyd_lightTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -219,9 +221,18 @@
 		F2C1F6882F79BBBB0078D380 /* CeilingLightFeature */ = {
 			isa = PBXGroup;
 			children = (
+				F2C1F68C2F79CCCC0078D380 /* ViewModels */,
 				F2C1F6892F79BBBB0078D380 /* Views */,
 			);
 			path = CeilingLightFeature;
+			sourceTree = "<group>";
+		};
+		F2C1F68C2F79CCCC0078D380 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				F2C1F68B2F79CCCC0078D380 /* CeilingLightViewModel.swift */,
+			);
+			path = ViewModels;
 			sourceTree = "<group>";
 		};
 		F2C1F6892F79BBBB0078D380 /* Views */ = {
@@ -551,6 +562,7 @@
 				F256F8552F4C2B2A0006F018 /* LightViewModel.swift in Sources */,
 				F2C1F67D2F7935140078D380 /* DeviceListView.swift in Sources */,
 				F2C1F6862F79BBBB0078D380 /* CeilingLightView.swift in Sources */,
+				F2C1F68A2F79CCCC0078D380 /* CeilingLightViewModel.swift in Sources */,
 				F256F8562F4C2B2A0006F018 /* ContentView.swift in Sources */,
 				F256F8572F4C2B2A0006F018 /* DIContainer.swift in Sources */,
 				F256F8582F4C2B2A0006F018 /* frank_lloyd_lightApp.swift in Sources */,
