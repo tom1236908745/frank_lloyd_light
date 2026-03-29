@@ -87,7 +87,7 @@ struct DeviceRow: View {
         case .colorBulb:
             return "lightbulb.fill"
         case .ceilingLightPro:
-            return "light.ceiling.fill"
+            return "lightbulb.fill"
         case .stripLight:
             return "lightstrip.fill"
         case .plug:
@@ -100,7 +100,7 @@ struct DeviceRow: View {
         case .colorBulb:
             return Color(hue: 0.10, saturation: 0.85, brightness: 0.95)
         case .ceilingLightPro:
-            return Color(hue: 0.13, saturation: 0.70, brightness: 0.95)
+            return Color(hue: 0.10, saturation: 0.85, brightness: 0.95)
         case .stripLight:
             return Color.purple
         case .plug:

@@ -30,7 +30,7 @@ class DeviceListViewModel: ObservableObject {
             var defaults: [Device] = []
             if let raw = Bundle.main.object(forInfoDictionaryKey: "SWITCHBOT_COLOR_BULB_DEVICE_ID") as? String {
                 let id = raw.trimmingCharacters(in: CharacterSet(charactersIn: "\""))
-                defaults.append(Device(id: id, name: "カラー電球", type: .colorBulb))
+                defaults.append(Device(id: id, name: "AKARI X1", type: .colorBulb))
             }
             if let raw = Bundle.main.object(forInfoDictionaryKey: "SWITCHBOT_CEILING_LIGHT_PRO") as? String {
                 let id = raw.trimmingCharacters(in: CharacterSet(charactersIn: "\""))
