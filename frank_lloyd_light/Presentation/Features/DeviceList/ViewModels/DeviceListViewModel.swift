@@ -34,7 +34,7 @@ class DeviceListViewModel: ObservableObject {
             }
             if let raw = Bundle.main.object(forInfoDictionaryKey: "SWITCHBOT_CEILING_LIGHT_PRO") as? String {
                 let id = raw.trimmingCharacters(in: CharacterSet(charactersIn: "\""))
-                defaults.append(Device(id: id, name: "シーリングライト", type: .colorBulb))
+                defaults.append(Device(id: id, name: "シーリングライト", type: .ceilingLightPro))
             }
             if !defaults.isEmpty {
                 devices = defaults

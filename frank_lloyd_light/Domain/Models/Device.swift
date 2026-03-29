@@ -14,6 +14,7 @@ struct Device: Identifiable, Codable, Hashable {
 
     enum DeviceType: String, Codable {
         case colorBulb = "Color Bulb"
+        case ceilingLightPro = "Ceiling Light Pro"
         case stripLight = "LED Strip Light"
         case plug = "Plug"
     }

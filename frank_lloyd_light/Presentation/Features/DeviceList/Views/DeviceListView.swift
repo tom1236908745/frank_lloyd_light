@@ -11,10 +11,20 @@ struct DeviceListView: View {
     @StateObject private var viewModel = DeviceListViewModel()
     @State private var showingAddDevice = false
 
+    @ViewBuilder
+    private func destinationView(for device: Device) -> some View {
+        switch device.type {
+        case .ceilingLightPro:
+            CeilingLightView(device: device)
+        default:
+            LightControlView(device: device)
+        }
+    }
+
     var body: some View {
         List {
             ForEach(viewModel.devices) { device in
-                NavigationLink(destination: LightControlView(device: device)) {
+                NavigationLink(destination: destinationView(for: device)) {
                     DeviceRow(device: device)
                 }
             }
@@ -80,6 +90,8 @@ struct DeviceRow: View {
         switch device.type {
         case .colorBulb:
             return "lightbulb.fill"
+        case .ceilingLightPro:
+            return "light.ceiling.fill"
         case .stripLight:
             return "lightstrip.fill"
         case .plug:
@@ -91,6 +103,8 @@ struct DeviceRow: View {
         switch device.type {
         case .colorBulb:
             return Color(hue: 0.10, saturation: 0.85, brightness: 0.95)
+        case .ceilingLightPro:
+            return Color(hue: 0.13, saturation: 0.70, brightness: 0.95)
         case .stripLight:
             return Color.purple
         case .plug:
@@ -130,7 +144,8 @@ struct AddDeviceView: View {
 
                 Section {
                     Picker("デバイスタイプ", selection: $deviceType) {
-                        Text("AKARI X1").tag(Device.DeviceType.colorBulb)
+                        Text("カラー電球").tag(Device.DeviceType.colorBulb)
+                        Text("シーリングライト").tag(Device.DeviceType.ceilingLightPro)
                         Text("LEDテープライト").tag(Device.DeviceType.stripLight)
                         Text("プラグ").tag(Device.DeviceType.plug)
                     }
