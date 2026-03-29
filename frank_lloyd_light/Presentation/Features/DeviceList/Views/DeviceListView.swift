@@ -10,7 +10,7 @@ import SwiftUI
 struct DeviceListView: View {
     @StateObject private var viewModel = DeviceListViewModel()
     @State private var showingAddDevice = false
-    
+
     var body: some View {
         List {
             ForEach(viewModel.devices) { device in
@@ -29,7 +29,7 @@ struct DeviceListView: View {
                     Image(systemName: "plus")
                 }
             }
-            
+
             ToolbarItem(placement: .navigationBarLeading) {
                 EditButton()
             }
@@ -47,7 +47,7 @@ struct DeviceListView: View {
 
 struct DeviceRow: View {
     let device: Device
-    
+
     var body: some View {
         HStack(spacing: 16) {
             // デバイスタイプに応じたアイコン
@@ -57,25 +57,25 @@ struct DeviceRow: View {
                 .frame(width: 40, height: 40)
                 .background(iconColor.opacity(0.15))
                 .clipShape(RoundedRectangle(cornerRadius: 10))
-            
+
             VStack(alignment: .leading, spacing: 4) {
                 Text(device.name)
                     .font(.headline)
-                
+
                 Text(device.type.rawValue)
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
-            
+
             Spacer()
-            
+
             Image(systemName: "chevron.right")
                 .font(.caption)
                 .foregroundStyle(.tertiary)
         }
         .padding(.vertical, 8)
     }
-    
+
     private var iconName: String {
         switch device.type {
         case .colorBulb:
@@ -86,7 +86,7 @@ struct DeviceRow: View {
             return "powerplug.fill"
         }
     }
-    
+
     private var iconColor: Color {
         switch device.type {
         case .colorBulb:
@@ -104,11 +104,11 @@ struct DeviceRow: View {
 struct AddDeviceView: View {
     @ObservedObject var viewModel: DeviceListViewModel
     @Environment(\.dismiss) private var dismiss
-    
+
     @State private var deviceId = ""
     @State private var deviceName = ""
     @State private var deviceType: Device.DeviceType = .colorBulb
-    
+
     var body: some View {
         NavigationView {
             Form {
@@ -117,7 +117,7 @@ struct AddDeviceView: View {
                 } header: {
                     Text("デバイス名")
                 }
-                
+
                 Section {
                     TextField("デバイスID", text: $deviceId)
                         .textInputAutocapitalization(.never)
@@ -127,10 +127,10 @@ struct AddDeviceView: View {
                 } footer: {
                     Text("SwitchBot アプリから取得できるデバイスIDを入力してください")
                 }
-                
+
                 Section {
                     Picker("デバイスタイプ", selection: $deviceType) {
-                        Text("カラー電球").tag(Device.DeviceType.colorBulb)
+                        Text("AKARI X1").tag(Device.DeviceType.colorBulb)
                         Text("LEDテープライト").tag(Device.DeviceType.stripLight)
                         Text("プラグ").tag(Device.DeviceType.plug)
                     }
@@ -146,7 +146,7 @@ struct AddDeviceView: View {
                         dismiss()
                     }
                 }
-                
+
                 ToolbarItem(placement: .confirmationAction) {
                     Button("追加") {
                         viewModel.addDevice(id: deviceId, name: deviceName, type: deviceType)
