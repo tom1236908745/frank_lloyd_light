@@ -25,11 +25,10 @@
 
 /* Begin PBXBuildFile section */
 		F2029BD22F3C52A4009AD241 /* .swiftLint.yml in Resources */ = {isa = PBXBuildFile; fileRef = F2029BD12F3C52A4009AD241 /* .swiftLint.yml */; };
+		F237804B2F792E4D00C7E339 /* SwitchBotClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = F237804A2F792E4D00C7E339 /* SwitchBotClient.swift */; };
 		F256F84F2F4C2B2A0006F018 /* DeviceStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = F256F82F2F4C2B2A0006F018 /* DeviceStatus.swift */; };
 		F256F8502F4C2B2A0006F018 /* LightRepositoryProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = F256F8312F4C2B2A0006F018 /* LightRepositoryProtocol.swift */; };
 		F256F8512F4C2B2A0006F018 /* LightControlUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = F256F8332F4C2B2A0006F018 /* LightControlUseCase.swift */; };
-		F256F8522F4C2B2A0006F018 /* SwitchBotClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = F256F8362F4C2B2A0006F018 /* SwitchBotClient.swift */; };
-		F256F8532F4C2B2A0006F018 /* FirebaseDatabaseClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = F256F8382F4C2B2A0006F018 /* FirebaseDatabaseClient.swift */; };
 		F256F8542F4C2B2A0006F018 /* LightRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = F256F83A2F4C2B2A0006F018 /* LightRepository.swift */; };
 		F256F8552F4C2B2A0006F018 /* LightViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F256F83D2F4C2B2A0006F018 /* LightViewModel.swift */; };
 		F256F8562F4C2B2A0006F018 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F256F83F2F4C2B2A0006F018 /* ContentView.swift */; };
@@ -63,11 +62,10 @@
 /* Begin PBXFileReference section */
 		F2029BD12F3C52A4009AD241 /* .swiftLint.yml */ = {isa = PBXFileReference; lastKnownFileType = text; path = .swiftLint.yml; sourceTree = "<group>"; };
 		F23780472F7904A700C7E339 /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
+		F237804A2F792E4D00C7E339 /* SwitchBotClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchBotClient.swift; sourceTree = "<group>"; };
 		F256F82F2F4C2B2A0006F018 /* DeviceStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceStatus.swift; sourceTree = "<group>"; };
 		F256F8312F4C2B2A0006F018 /* LightRepositoryProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightRepositoryProtocol.swift; sourceTree = "<group>"; };
 		F256F8332F4C2B2A0006F018 /* LightControlUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightControlUseCase.swift; sourceTree = "<group>"; };
-		F256F8362F4C2B2A0006F018 /* SwitchBotClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchBotClient.swift; sourceTree = "<group>"; };
-		F256F8382F4C2B2A0006F018 /* FirebaseDatabaseClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseDatabaseClient.swift; sourceTree = "<group>"; };
 		F256F83A2F4C2B2A0006F018 /* LightRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightRepository.swift; sourceTree = "<group>"; };
 		F256F83D2F4C2B2A0006F018 /* LightViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightViewModel.swift; sourceTree = "<group>"; };
 		F256F83F2F4C2B2A0006F018 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -76,7 +74,6 @@
 		F256F84A2F4C2B2A0006F018 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F256F84B2F4C2B2A0006F018 /* frank_lloyd_lightApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = frank_lloyd_lightApp.swift; sourceTree = "<group>"; };
 		F256F84C2F4C2B2A0006F018 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		F256F84D2F4C2B2A0006F018 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		F2DE0E5F2ED1CB9A003C71EA /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		F2F903EB2ECF49A200E40072 /* frank_lloyd_light.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = frank_lloyd_light.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F2F903FB2ECF49A500E40072 /* frank_lloyd_lightTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = frank_lloyd_lightTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -163,17 +160,9 @@
 		F256F8372F4C2B2A0006F018 /* API */ = {
 			isa = PBXGroup;
 			children = (
-				F256F8362F4C2B2A0006F018 /* SwitchBotClient.swift */,
+				F237804A2F792E4D00C7E339 /* SwitchBotClient.swift */,
 			);
 			path = API;
-			sourceTree = "<group>";
-		};
-		F256F8392F4C2B2A0006F018 /* Firebase */ = {
-			isa = PBXGroup;
-			children = (
-				F256F8382F4C2B2A0006F018 /* FirebaseDatabaseClient.swift */,
-			);
-			path = Firebase;
 			sourceTree = "<group>";
 		};
 		F256F83B2F4C2B2A0006F018 /* Repository */ = {
@@ -188,7 +177,6 @@
 			isa = PBXGroup;
 			children = (
 				F256F8372F4C2B2A0006F018 /* API */,
-				F256F8392F4C2B2A0006F018 /* Firebase */,
 				F256F83B2F4C2B2A0006F018 /* Repository */,
 			);
 			path = Infrastructure;
@@ -278,7 +266,6 @@
 				F256F84A2F4C2B2A0006F018 /* Assets.xcassets */,
 				F256F84B2F4C2B2A0006F018 /* frank_lloyd_lightApp.swift */,
 				F256F84C2F4C2B2A0006F018 /* GoogleService-Info.plist */,
-				F256F84D2F4C2B2A0006F018 /* README.md */,
 			);
 			path = frank_lloyd_light;
 			sourceTree = "<group>";
@@ -507,8 +494,7 @@
 				F256F84F2F4C2B2A0006F018 /* DeviceStatus.swift in Sources */,
 				F256F8502F4C2B2A0006F018 /* LightRepositoryProtocol.swift in Sources */,
 				F256F8512F4C2B2A0006F018 /* LightControlUseCase.swift in Sources */,
-				F256F8522F4C2B2A0006F018 /* SwitchBotClient.swift in Sources */,
-				F256F8532F4C2B2A0006F018 /* FirebaseDatabaseClient.swift in Sources */,
+				F237804B2F792E4D00C7E339 /* SwitchBotClient.swift in Sources */,
 				F256F8542F4C2B2A0006F018 /* LightRepository.swift in Sources */,
 				F256F8552F4C2B2A0006F018 /* LightViewModel.swift in Sources */,
 				F256F8562F4C2B2A0006F018 /* ContentView.swift in Sources */,
@@ -690,6 +676,7 @@
 		};
 		F2F904102ECF49A500E40072 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = F23780472F7904A700C7E339 /* Debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -826,7 +813,7 @@
 				F252B54C2F3C314D00B53CEE /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		F2F903E62ECF49A200E40072 /* Build configuration list for PBXProject "frank_lloyd_light" */ = {
 			isa = XCConfigurationList;
@@ -835,7 +822,7 @@
 				F2F9040E2ECF49A500E40072 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		F2F9040F2ECF49A500E40072 /* Build configuration list for PBXNativeTarget "frank_lloyd_light" */ = {
 			isa = XCConfigurationList;
@@ -844,7 +831,7 @@
 				F2F904112ECF49A500E40072 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		F2F904122ECF49A500E40072 /* Build configuration list for PBXNativeTarget "frank_lloyd_lightTests" */ = {
 			isa = XCConfigurationList;
@@ -853,7 +840,7 @@
 				F2F904142ECF49A500E40072 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		F2F904152ECF49A500E40072 /* Build configuration list for PBXNativeTarget "frank_lloyd_lightUITests" */ = {
 			isa = XCConfigurationList;
@@ -862,7 +849,7 @@
 				F2F904172ECF49A500E40072 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
 

@@ -1,30 +1,31 @@
 import Foundation
 import CryptoKit
 
-class SwitchBotAPI {
-    private let token: String
-    private let secret: String
-    private let deviceId: String
-    private let baseURL = URL(string: "https://api.switch-bot.com/v1.1")!
+enum SwitchBotClient {
+    private static let baseURL = URL(string: "https://api.switch-bot.com/v1.1")!
     
-    convenience init?() {
+    enum SwitchBotClientError: Error {
+        case missingCredentials
+    }
+    
+    private static func getCredentials() throws -> (token: String, secret: String, deviceId: String) {
         guard
-            let token = Bundle.main.object(forInfoDictionaryKey: "SWITCHBOT_TOKEN") as? String,
-            let secret = Bundle.main.object(forInfoDictionaryKey: "SWITCHBOT_SECRET") as? String,
-            let deviceId = Bundle.main.object(forInfoDictionaryKey: "SWITCHBOT_DEVICE_ID") as? String
+            let tokenRaw = Bundle.main.object(forInfoDictionaryKey: "SWITCHBOT_TOKEN") as? String,
+            let secretRaw = Bundle.main.object(forInfoDictionaryKey: "SWITCHBOT_SECRET") as? String,
+            let deviceIdRaw = Bundle.main.object(forInfoDictionaryKey: "SWITCHBOT_DEVICE_ID") as? String
         else {
-            return nil
+            throw SwitchBotClientError.missingCredentials
         }
-        self.init(token: token, secret: secret, deviceId: deviceId)
+        
+        // Remove surrounding quotes if present
+        let token = tokenRaw.trimmingCharacters(in: CharacterSet(charactersIn: "\""))
+        let secret = secretRaw.trimmingCharacters(in: CharacterSet(charactersIn: "\""))
+        let deviceId = deviceIdRaw.trimmingCharacters(in: CharacterSet(charactersIn: "\""))
+        
+        return (token, secret, deviceId)
     }
     
-    init(token: String, secret: String, deviceId: String) {
-        self.token = token
-        self.secret = secret
-        self.deviceId = deviceId
-    }
-    
-    func applyAuthHeaders(_ request: inout URLRequest) {
+    private static func applyAuthHeaders(_ request: inout URLRequest, token: String, secret: String) {
         let timestamp = String(Int(Date().timeIntervalSince1970 * 1000))
         let nonce = UUID().uuidString
         
@@ -32,7 +33,7 @@ class SwitchBotAPI {
         let sign = HMACSHA256(stringToSign, key: secret)
         
         // Debug logs (do not print secret)
-        let maskedToken: String = token.prefix(6) + "…"
+        let maskedToken: String = String(token.prefix(6)) + "…"
         let maskedSign: String = String(sign.prefix(10)) + "…"
         print("[SwitchBot][Auth] signVersion=1")
         print("[SwitchBot][Auth] t=", timestamp)
@@ -47,36 +48,33 @@ class SwitchBotAPI {
         request.setValue("1", forHTTPHeaderField: "signVersion")
     }
     
-    func fetchDeviceStatus() {
-        let url = baseURL.appendingPathComponent("devices").appendingPathComponent(deviceId).appendingPathComponent("status")
+    static func fetchDeviceStatus() async throws -> URLRequest {
+        let credentials = try getCredentials()
+        let url = baseURL
+            .appendingPathComponent("devices")
+            .appendingPathComponent(credentials.deviceId)
+            .appendingPathComponent("status")
+        
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
-        applyAuthHeaders(&request)
+        applyAuthHeaders(&request, token: credentials.token, secret: credentials.secret)
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         
         print("[SwitchBot][Request] GET", url.absoluteString)
         
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            if let error = error {
-                print("[SwitchBot][Response] Error:", error.localizedDescription)
-                return
-            }
-            if let httpResponse = response as? HTTPURLResponse {
-                print("[SwitchBot][Response] HTTP Status:", httpResponse.statusCode)
-            }
-            if let data = data, let bodyString = String(data: data, encoding: .utf8) {
-                print("[SwitchBot][Response] Body:")
-                print(bodyString)
-            }
-        }
-        task.resume()
+        return request
     }
     
-    func updateDeviceStatus(command: String, parameter: String) {
-        let url = baseURL.appendingPathComponent("devices").appendingPathComponent(deviceId).appendingPathComponent("commands")
+    static func updateDeviceStatus(command: String, parameter: String) async throws -> URLRequest {
+        let credentials = try getCredentials()
+        let url = baseURL
+            .appendingPathComponent("devices")
+            .appendingPathComponent(credentials.deviceId)
+            .appendingPathComponent("commands")
+        
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
-        applyAuthHeaders(&request)
+        applyAuthHeaders(&request, token: credentials.token, secret: credentials.secret)
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         
         let body: [String: Any] = [
@@ -88,23 +86,10 @@ class SwitchBotAPI {
         
         print("[SwitchBot][Request] POST", url.absoluteString)
         
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            if let error = error {
-                print("[SwitchBot][Response] Error:", error.localizedDescription)
-                return
-            }
-            if let httpResponse = response as? HTTPURLResponse {
-                print("[SwitchBot][Response] HTTP Status:", httpResponse.statusCode)
-            }
-            if let data = data, let bodyString = String(data: data, encoding: .utf8) {
-                print("[SwitchBot][Response] Body:")
-                print(bodyString)
-            }
-        }
-        task.resume()
+        return request
     }
     
-    private func HMACSHA256(_ data: String, key: String) -> String {
+    private static func HMACSHA256(_ data: String, key: String) -> String {
         let keyData = Data(key.utf8)
         let messageData = Data(data.utf8)
         let symmetricKey = SymmetricKey(data: keyData)
